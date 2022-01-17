@@ -8,7 +8,7 @@ import BottomNavbarComponent from "./components/BottomNavbarComponent";
 import Container from "react-bootstrap/Container";
 import { ObjectFormat } from "./models/ObjectFormat";
 import { ObservationsInformationWrapper } from "./models/ObservationsInformationWrapper";
-import Home from "./Home";
+import VitalsContainer from "./vitals/VitalsContainer";
 
 class App extends React.Component {
     state = {
@@ -30,7 +30,7 @@ class App extends React.Component {
                 <TopNavbarComponent />
                 <Container className="topnav-margin">
                     <Switch>
-                        <Route exact path="/" component={Home} />
+                        <Route exact path="/" component={VitalsContainer} />
                     </Switch>
                 </Container>
                 <BottomNavbarComponent />
