@@ -2,11 +2,23 @@ import React, { Component } from "react";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import VitalsForm from "./VitalsForm";
+import { ObjectFormat } from "../models/ObjectFormat";
 
 export default class VitalsContainer extends Component {
     state = {
         form: {
             validated: false,
+        },
+        observations: [],
+        patientAliases: {
+            alias: "",
+            assignAuth: null,
+            aliasType: "MRN",
+            OID: "83.83.83",
+        },
+        facility: {
+            organizationAlias: "85.85.85",
+            hospitalAlias: "85.85.85",
         },
     };
 
@@ -22,7 +34,38 @@ export default class VitalsContainer extends Component {
         //     },
         // });
         // console.log("handleFormChange: ");
-        console.log("handleFormChange");
+        // console.log("handleFormChange");
+    };
+
+    /**
+     * Copy observations values to state
+     */
+    handleObservationsChange = (event) => {};
+
+    /**
+     * Copy patient alias values to state
+     */
+    handlePatientAliasesChange = (event) => {
+        console.log("handlePatientAliasesChange");
+        this.setState({
+            patientAliases: {
+                ...this.state.patientAliases,
+                [event.target.name]: event.target.value,
+            },
+        });
+    };
+
+    /**
+     * Copy patient alias values to state
+     */
+    handleFacilityChange = (event) => {
+        console.log("handleFacilityChange");
+        this.setState({
+            facility: {
+                ...this.state.facility,
+                [event.target.name]: event.target.value,
+            },
+        });
     };
 
     /**
@@ -45,6 +88,26 @@ export default class VitalsContainer extends Component {
             console.log("OK for submission");
 
             // call api
+
+            console.log(JSON.stringify(ObjectFormat));
+            // fetch(
+            //     "http://win10d-05876:50110/criticaloutcomes-interfaces/rest/observations",
+            //     {
+            //         method: "POST",
+            //         body: JSON.stringify(ObjectFormat),
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //             Accept: "*/*",
+            //         },
+            //     }
+            // )
+            //     .then((response) => {
+            //         console.log(response.status);
+            //         return response.statusText;
+            //     })
+            //     .then((error) => {
+            //         console.error(error);
+            //     });
         }
     };
 
@@ -70,6 +133,12 @@ export default class VitalsContainer extends Component {
                             <VitalsForm
                                 handleSubmit={this.handleSubmit}
                                 handleFormChange={this.handleFormChange}
+                                facility={this.state.facility}
+                                handleFacilityChange={this.handleFacilityChange}
+                                patientAliases={this.state.patientAliases}
+                                handlePatientAliasesChange={
+                                    this.handlePatientAliasesChange
+                                }
                                 form={this.state.form}
                             />
                         </div>
