@@ -1,0 +1,5 @@
+/* To remove extra padding of .nav-link */
+.nav-reduce-top-bottom-padding {
+    padding-top: 0;
+    padding-bottom: 0;
+}

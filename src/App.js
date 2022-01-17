@@ -1,7 +1,14 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css";
+import { Route, Switch } from "react-router-dom";
+import TopNavbarComponent from "./components/TopNavbarComponent";
+import BottomNavbarComponent from "./components/BottomNavbarComponent";
+import Container from "react-bootstrap/Container";
 import { ObjectFormat } from "./models/ObjectFormat";
 import { ObservationsInformationWrapper } from "./models/ObservationsInformationWrapper";
+import Home from "./Home";
 
 class App extends React.Component {
     state = {
@@ -20,9 +27,13 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <header className="App-header">
-                    Alt<em>(ternative)</em> Crawler
-                </header>
+                <TopNavbarComponent />
+                <Container className="topnav-margin">
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                    </Switch>
+                </Container>
+                <BottomNavbarComponent />
             </div>
         );
     }
