@@ -3,32 +3,89 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
+import Select from "react-select";
 
-function RenderObservationsForm({ counter, facility, handleFacilityChange }) {
+const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+];
+
+/**
+ *	The text box/form to display when "plus" button is clicked.
+ */
+function RenderObservationsForm({
+    identifier,
+    counter,
+    facility,
+    handleFacilityChange,
+}) {
+    console.log("counter: ");
     console.log(counter);
     if (counter === 0) return <></>;
 
     return (
-        <Col md={8}>
-            <Form.Group md={12} as={Col} controlId="observationsControl">
-                <Form.Label>Observations</Form.Label>
-                <Form.Control
-                    required
-                    type="text"
-                    name="organizationAlias"
-                    placeholder="Organization Alias"
-                    onChange={handleFacilityChange}
-                    defaultValue={facility.organizationAlias}
-                />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                <Form.Control.Feedback type="invalid">
-                    Please provide a valid Organization Alias.
-                </Form.Control.Feedback>
-            </Form.Group>
+        <Col md={9} className="mb-3">
+            <Row className="w-100">
+                <Col md={1}>
+                    <span class="badge rounded-pill bg-dark">{identifier}</span>
+                </Col>
+                <Col md={11}>
+                    <Card className="px-4 py-3 w-100">
+                        <Form.Group
+                            md={12}
+                            as={Col}
+                            controlId="observationsControl"
+                            className="mb-3"
+                        >
+                            <Form.Label>Select vitals</Form.Label>
+                            <Select
+                                options={options}
+                                name="ckilist"
+                                hasValue={true}
+                                classNamePrefix="form-control"
+                                // className="form-control"
+                            />
+                            <Form.Control.Feedback>
+                                Looks good!
+                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a valid Organization Alias.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group
+                            md={12}
+                            as={Col}
+                            controlId="validationCustom12"
+                            className="mb-3"
+                        >
+                            <Form.Label>Value</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                name="resultValue"
+                                placeholder="Result Value"
+                                // onChange={handleFormChange}
+                                defaultValue={0}
+                            />
+                            <Form.Control.Feedback>
+                                Looks good!
+                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a valid value to chart.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Card>
+                </Col>
+            </Row>
         </Col>
     );
 }
 
+/**
+ * Functional component to accept form values from user
+ */
 function VitalsForm({
     form,
     handleSubmit,
@@ -38,28 +95,40 @@ function VitalsForm({
     patientAliases,
     handlePatientAliasesChange,
 }) {
+    // observations counter
     const [counter, setCounter] = useState(0);
-    const [obs, setObs] = useState([]);
+    // array of observation forms (RenderObservationsForm)
+    const [observationsFormList, setObservationsFormList] = useState([]);
 
+    /**
+     * Increase/Decrease counter of observations and add observation form to the array.
+     *
+     * TODO: Iterating 'counter'times each time counter is updated and adding observation form is not optimal.
+     * Need to work on implementing just adding/removing 1 element.
+     */
     const alterObservations = (counter) => {
         if (counter < 0) return <></>;
 
+        // increase/decrease counter
         setCounter(counter);
+
         var obs = [];
+
         for (var i = 0; i < counter; i++) {
             obs.push(
                 <RenderObservationsForm
                     key={i}
+                    identifier={i + 1}
                     counter={counter}
                     facility={facility}
                     handleFacilityChange={handleFacilityChange}
                 />
             );
         }
-        setObs(obs);
+        setObservationsFormList(obs);
     };
 
-    useEffect(() => {}, [counter, obs]);
+    useEffect(() => {}, [counter, observationsFormList]);
     return (
         <Form noValidate validated={form.validated} onSubmit={handleSubmit}>
             <Row>
@@ -190,11 +259,11 @@ function VitalsForm({
                     <h6>Observations</h6>
                     <hr />
                     <Row className="mb-3">
-                        {obs}
-                        <Col md={4}>
+                        {observationsFormList}
+                        <Col md={3}>
                             <div className="mt-3 pt-2">
                                 <Button
-                                    variant="primary"
+                                    variant="success"
                                     className="rounded-pill me-2"
                                     onClick={() =>
                                         alterObservations(counter + 1)
@@ -203,7 +272,7 @@ function VitalsForm({
                                     <i className="fs-5 bi bi-plus-lg"></i>
                                 </Button>
                                 <Button
-                                    variant="primary"
+                                    variant="danger"
                                     className="rounded-pill"
                                     onClick={() =>
                                         alterObservations(counter - 1)
@@ -216,7 +285,7 @@ function VitalsForm({
                     </Row>
                 </div>
             </Row>
-            <Button type="submit" variant="success">
+            <Button type="submit" variant="primary">
                 Post
             </Button>
         </Form>
