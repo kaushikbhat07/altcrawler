@@ -4,6 +4,10 @@ import Card from "react-bootstrap/Card";
 import VitalsForm from "./VitalsForm";
 import { ObjectFormat } from "../models/ObjectFormat";
 
+/**
+ * @author kaushikbhat07
+ */
+
 export default class VitalsContainer extends Component {
     state = {
         form: {
@@ -19,6 +23,9 @@ export default class VitalsContainer extends Component {
         facility: {
             organizationAlias: "85.85.85",
             hospitalAlias: "85.85.85",
+        },
+        dropdown: {
+            selectedOption: null,
         },
     };
 
@@ -38,9 +45,75 @@ export default class VitalsContainer extends Component {
     };
 
     /**
-     * Copy observations values to state
+     * Copy observations dropdown values to state
      */
-    handleObservationsChange = (event) => {};
+    handleObservationsDropDownChange = (selectedOption, identifier) => {
+        console.log("handleObservationsChange");
+        this.setState({
+            dropdown: {
+                identifier: identifier,
+                selectedOption: selectedOption,
+            },
+        });
+    };
+
+    /**
+     * Copy observations textbox values to state - Either adds new observation to observations state,
+     * or replaces an already existing one.
+     * @param resultValue Value of the observation
+     * @param identifier Unique number for every observation
+     */
+    handleObservationsTextBoxChange = (resultValue, identifier) => {
+        console.log("handleObservationsTextBoxChange");
+
+        var enteredObservation = {
+            identifier: identifier,
+            resultValue: resultValue.target.value,
+        };
+
+        // This list will be set to observations state.
+        var observationsList = [];
+
+        // Push the first observation directly to the list, since duplicate is not possible in first observation.
+        if (this.state.observations.length === 0) {
+            observationsList.push(enteredObservation);
+        } else {
+            let identifierDuplicate = false;
+
+            /**
+             * Loop through stored observations in state, to check if the @var enteredObservation is a modified entry or a new one.
+             */
+            this.state.observations.map((savedObservation) => {
+                if (
+                    savedObservation.identifier ===
+                    enteredObservation.identifier
+                ) {
+                    // Modified entry - so discard the stored observation and push modified observation into the list.
+                    identifierDuplicate = true;
+                    return observationsList.push(enteredObservation);
+                } else {
+                    // Push the stored observation to the list.
+                    return observationsList.push(savedObservation);
+                }
+            });
+
+            /**
+             * At this point, if the @var identifierDuplicate is false, then @var enteredObservation is a new entry, so push it to list.
+             */
+            if (identifierDuplicate === false)
+                observationsList.push(enteredObservation);
+        }
+
+        // Assign the state to the list having all observations.
+        this.setState({
+            observations: observationsList,
+        });
+
+        // TODO: Find a optimal way to do this without iterating through all the stored observations.
+
+        console.log(resultValue.target.value);
+        console.log(identifier);
+    };
 
     /**
      * Copy patient alias values to state
@@ -139,7 +212,14 @@ export default class VitalsContainer extends Component {
                                 handlePatientAliasesChange={
                                     this.handlePatientAliasesChange
                                 }
+                                handleObservationsDropDownChange={
+                                    this.handleObservationsDropDownChange
+                                }
+                                handleObservationsTextBoxChange={
+                                    this.handleObservationsTextBoxChange
+                                }
                                 form={this.state.form}
+                                dropdown={this.state.dropdown}
                             />
                         </div>
                     </Card.Body>

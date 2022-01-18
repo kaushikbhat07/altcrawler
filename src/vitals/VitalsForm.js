@@ -18,8 +18,9 @@ const options = [
 function RenderObservationsForm({
     identifier,
     counter,
-    facility,
-    handleFacilityChange,
+    handleObservationsDropDownChange,
+    dropdown,
+    handleObservationsTextBoxChange,
 }) {
     console.log("counter: ");
     console.log(counter);
@@ -29,7 +30,9 @@ function RenderObservationsForm({
         <Col md={9} className="mb-3">
             <Row className="w-100">
                 <Col md={1}>
-                    <span class="badge rounded-pill bg-dark">{identifier}</span>
+                    <span className="badge rounded-pill bg-dark">
+                        {identifier}
+                    </span>
                 </Col>
                 <Col md={11}>
                     <Card className="px-4 py-3 w-100">
@@ -42,16 +45,22 @@ function RenderObservationsForm({
                             <Form.Label>Select vitals</Form.Label>
                             <Select
                                 options={options}
-                                name="ckilist"
-                                hasValue={true}
-                                classNamePrefix="form-control"
+                                name="cki"
+                                // classNamePrefix="form-control"
+                                // value={dropdown.selectedOption}
+                                onChange={(selectedOption) =>
+                                    handleObservationsDropDownChange(
+                                        selectedOption,
+                                        identifier
+                                    )
+                                }
                                 // className="form-control"
                             />
                             <Form.Control.Feedback>
                                 Looks good!
                             </Form.Control.Feedback>
                             <Form.Control.Feedback type="invalid">
-                                Please provide a valid Organization Alias.
+                                Please provide a valid CKI.
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
@@ -66,7 +75,12 @@ function RenderObservationsForm({
                                 type="text"
                                 name="resultValue"
                                 placeholder="Result Value"
-                                // onChange={handleFormChange}
+                                onChange={(resultValue) =>
+                                    handleObservationsTextBoxChange(
+                                        resultValue,
+                                        identifier
+                                    )
+                                }
                                 defaultValue={0}
                             />
                             <Form.Control.Feedback>
@@ -94,6 +108,9 @@ function VitalsForm({
     handleFacilityChange,
     patientAliases,
     handlePatientAliasesChange,
+    handleObservationsDropDownChange,
+    dropdown,
+    handleObservationsTextBoxChange,
 }) {
     // observations counter
     const [counter, setCounter] = useState(0);
@@ -103,8 +120,8 @@ function VitalsForm({
     /**
      * Increase/Decrease counter of observations and add observation form to the array.
      *
-     * TODO: Iterating 'counter'times each time counter is updated and adding observation form is not optimal.
-     * Need to work on implementing just adding/removing 1 element.
+     * TODO: Iterating 'counter'times each time counter is updated and adding observation form is not optimal - takes O(counter) time.
+     * Need to work on implementing just adding/removing 1 element in O(1) time.
      */
     const alterObservations = (counter) => {
         if (counter < 0) return <></>;
@@ -122,6 +139,13 @@ function VitalsForm({
                     counter={counter}
                     facility={facility}
                     handleFacilityChange={handleFacilityChange}
+                    handleObservationsDropDownChange={
+                        handleObservationsDropDownChange
+                    }
+                    dropdown={dropdown}
+                    handleObservationsTextBoxChange={
+                        handleObservationsTextBoxChange
+                    }
                 />
             );
         }
@@ -141,7 +165,7 @@ function VitalsForm({
                             as={Col}
                             controlId="validationCustom01"
                         >
-                            <Form.Label>MRN</Form.Label>
+                            <Form.Label>MRN / Alias</Form.Label>
                             <Form.Control
                                 required
                                 type="text"
