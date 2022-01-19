@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import VitalsForm from "./VitalsForm";
+// import { VitalsDropdown } from "../models/VitalsDropdown";
 import { ObjectFormat } from "../models/ObjectFormat";
 
 /**
@@ -24,9 +25,7 @@ export default class VitalsContainer extends Component {
             organizationAlias: "85.85.85",
             hospitalAlias: "85.85.85",
         },
-        dropdown: {
-            selectedOption: null,
-        },
+        dropdown: [],
     };
 
     /**
@@ -47,13 +46,67 @@ export default class VitalsContainer extends Component {
     /**
      * Copy observations dropdown values to state
      */
-    handleObservationsDropDownChange = (selectedOption, identifier) => {
-        console.log("handleObservationsChange");
+    handleObservationsDropDownChange = (event, selectedOption, identifier) => {
+        console.log("handleObservationsDropDownChange");
+
+        // console.log("event: ");
+        // console.log(event);
+        // console.log("selectedOption: ");
+        // console.log(selectedOption);
+        // this.setState({
+        //     dropdown: {
+        //         identifier: identifier,
+        //         selectedOption: selectedOption,
+        //     },
+        // });
+
+        var enteredObservation = {
+            identifier: identifier,
+            // resultValue: resultValue.target.value,
+            [selectedOption.name]: event.value,
+        };
+
+        // This list will be set to observations state.
+        var observationsList = [];
+
+        // Push the first observation directly to the list, since duplicate is not possible in first observation.
+        if (this.state.observations.length === 0) {
+            observationsList.push(enteredObservation);
+        } else {
+            let identifierDuplicate = false;
+
+            /**
+             * Loop through stored observations in state, to check if the @var enteredObservation is a modified entry or a new one.
+             */
+            this.state.observations.map((savedObservation) => {
+                if (
+                    savedObservation.identifier ===
+                    enteredObservation.identifier
+                ) {
+                    // Modified entry - so append the stored observation to the new/modified observation and push it to the list.
+                    identifierDuplicate = true;
+                    var toBeSavedObservation = Object.assign(
+                        savedObservation,
+                        enteredObservation
+                    );
+
+                    return observationsList.push(toBeSavedObservation);
+                } else {
+                    // Push the stored observation to the list.
+                    return observationsList.push(savedObservation);
+                }
+            });
+
+            /**
+             * At this point, if the @var identifierDuplicate is false, then @var enteredObservation is a new entry, so push it to list.
+             */
+            if (identifierDuplicate === false)
+                observationsList.push(enteredObservation);
+        }
+
+        // Assign the state to the list having all observations.
         this.setState({
-            dropdown: {
-                identifier: identifier,
-                selectedOption: selectedOption,
-            },
+            observations: observationsList,
         });
     };
 
@@ -63,12 +116,13 @@ export default class VitalsContainer extends Component {
      * @param resultValue Value of the observation
      * @param identifier Unique number for every observation
      */
-    handleObservationsTextBoxChange = (resultValue, identifier) => {
+    handleObservationsTextBoxChange = (event, identifier) => {
         console.log("handleObservationsTextBoxChange");
 
         var enteredObservation = {
             identifier: identifier,
-            resultValue: resultValue.target.value,
+            // resultValue: resultValue.target.value,
+            [event.target.name]: event.target.value,
         };
 
         // This list will be set to observations state.
@@ -90,7 +144,12 @@ export default class VitalsContainer extends Component {
                 ) {
                     // Modified entry - so discard the stored observation and push modified observation into the list.
                     identifierDuplicate = true;
-                    return observationsList.push(enteredObservation);
+                    var toBeSavedObservation = Object.assign(
+                        savedObservation,
+                        enteredObservation
+                    );
+
+                    return observationsList.push(toBeSavedObservation);
                 } else {
                     // Push the stored observation to the list.
                     return observationsList.push(savedObservation);
@@ -111,7 +170,7 @@ export default class VitalsContainer extends Component {
 
         // TODO: Find a optimal way to do this without iterating through all the stored observations.
 
-        console.log(resultValue.target.value);
+        // console.log(resultValue.target.value);
         console.log(identifier);
     };
 
@@ -220,6 +279,7 @@ export default class VitalsContainer extends Component {
                                 }
                                 form={this.state.form}
                                 dropdown={this.state.dropdown}
+                                // VitalsDropdown={VitalsDropdown}
                             />
                         </div>
                     </Card.Body>

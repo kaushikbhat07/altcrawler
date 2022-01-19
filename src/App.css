@@ -12,7 +12,7 @@ html {
 }
 
 body {
-    background-color: #f8f9fc !important;
+    background-color: #868686 !important;
 }
 .topnav-margin {
     margin-top: 6.5rem;
@@ -21,3 +21,5 @@ body {
 #top-navbar {
     max-width: 100%;
 }
+
+/* background-color: #f8f9fc !important; */

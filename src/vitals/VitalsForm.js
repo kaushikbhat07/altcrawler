@@ -5,17 +5,20 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Select from "react-select";
+import { VitalsDropdown } from "../models/VitalsDropdown";
 
-const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-];
+// const dropdownOptions = [
+//     { value: "chocolate", label: "Chocolate" },
+//     { value: "strawberry", label: "Strawberry" },
+//     { value: "vanilla", label: "Vanilla" },
+// ];
+
+const dropdownOptions = VitalsDropdown;
 
 /**
  *	The text box/form to display when "plus" button is clicked.
  */
-function RenderObservationsForm({
+function ObservationsForm({
     identifier,
     counter,
     handleObservationsDropDownChange,
@@ -44,12 +47,13 @@ function RenderObservationsForm({
                         >
                             <Form.Label>Select vitals</Form.Label>
                             <Select
-                                options={options}
+                                options={dropdownOptions}
                                 name="cki"
                                 // classNamePrefix="form-control"
                                 // value={dropdown.selectedOption}
-                                onChange={(selectedOption) =>
+                                onChange={(event, selectedOption) =>
                                     handleObservationsDropDownChange(
+                                        event,
                                         selectedOption,
                                         identifier
                                     )
@@ -75,9 +79,9 @@ function RenderObservationsForm({
                                 type="text"
                                 name="resultValue"
                                 placeholder="Result Value"
-                                onChange={(resultValue) =>
+                                onChange={(event) =>
                                     handleObservationsTextBoxChange(
-                                        resultValue,
+                                        event,
                                         identifier
                                     )
                                 }
@@ -88,6 +92,32 @@ function RenderObservationsForm({
                             </Form.Control.Feedback>
                             <Form.Control.Feedback type="invalid">
                                 Please provide a valid value to chart.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group
+                            md={12}
+                            as={Col}
+                            controlId="validationCustom13"
+                            className="mb-3"
+                        >
+                            <Form.Label>Result Date Time</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                name="resultDateTime"
+                                placeholder="YYYYMMDDMMSS"
+                                onChange={(event) =>
+                                    handleObservationsTextBoxChange(
+                                        event,
+                                        identifier
+                                    )
+                                }
+                            />
+                            <Form.Control.Feedback>
+                                Looks good!
+                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                                Please provide a valid date time for observation
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Card>
@@ -133,7 +163,7 @@ function VitalsForm({
 
         for (var i = 0; i < counter; i++) {
             obs.push(
-                <RenderObservationsForm
+                <ObservationsForm
                     key={i}
                     identifier={i + 1}
                     counter={counter}
@@ -169,9 +199,9 @@ function VitalsForm({
                             <Form.Control
                                 required
                                 type="text"
-                                name="mrn"
+                                name="alias"
                                 placeholder="Patient MRN"
-                                onChange={handleFormChange}
+                                onChange={handlePatientAliasesChange}
                                 defaultValue={patientAliases.alias}
                             />
                             <Form.Control.Feedback>
@@ -194,7 +224,7 @@ function VitalsForm({
                                 type="text"
                                 name="OID"
                                 placeholder="OID"
-                                onChange={handleFormChange}
+                                onChange={handlePatientAliasesChange}
                                 defaultValue={patientAliases.OID}
                             />
                             <Form.Control.Feedback>

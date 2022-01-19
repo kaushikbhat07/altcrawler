@@ -10,8 +10,8 @@ function TopNavbarComponent() {
             fixed="top"
             collapseOnSelect
             expand="lg"
-            bg="light"
-            variant="light"
+            bg="dark"
+            variant="dark"
             id="top-navbar"
             className="shadow"
         >
