@@ -21,14 +21,6 @@ export const ObjectFormat = {
         physicianService: null,
         observations: [
             {
-                alias: "CERNER!C9F3350E-E785-41C7-A998-28A2AB79287D",
-                resultValue: "0.0",
-                inError: false,
-                resultDateTime: "202201110155",
-                aliasType: "MILL_CKI",
-                observationStatus: "AUTH",
-            },
-            {
                 alias: "9279-1",
                 resultValue: "32.0",
                 inError: false,

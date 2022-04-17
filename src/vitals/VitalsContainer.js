@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import VitalsForm from "./VitalsForm";
-// import { VitalsDropdown } from "../models/VitalsDropdown";
 import { ObjectFormat } from "../models/ObjectFormat";
 
 /**
@@ -29,36 +28,10 @@ export default class VitalsContainer extends Component {
     };
 
     /**
-     * Copy pastas the form values to state
-     * @param {DOM event} event
-     */
-    handleFormChange = (event) => {
-        // this.setState({
-        //     newStudent: {
-        //         ...this.state.newStudent,
-        //         [event.target.name]: event.target.value,
-        //     },
-        // });
-        // console.log("handleFormChange: ");
-        // console.log("handleFormChange");
-    };
-
-    /**
      * Copy observations dropdown values to state
      */
     handleObservationsDropDownChange = (event, selectedOption, identifier) => {
         console.log("handleObservationsDropDownChange");
-
-        // console.log("event: ");
-        // console.log(event);
-        // console.log("selectedOption: ");
-        // console.log(selectedOption);
-        // this.setState({
-        //     dropdown: {
-        //         identifier: identifier,
-        //         selectedOption: selectedOption,
-        //     },
-        // });
 
         var enteredObservation = {
             identifier: identifier,
@@ -258,7 +231,7 @@ export default class VitalsContainer extends Component {
                     <Card.Body>
                         <div>
                             <h5 className="mb-2">
-                                Post millennium data to interfaces
+                                Post EHR data to interfaces
                             </h5>
                             <hr />
 
